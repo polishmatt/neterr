@@ -4,34 +4,48 @@ import http.client
 import urllib.error
 
 __all__ = [
-    'HTTP_EXCEPTIONS'
+    'SocketErrors',
+    'StrictHTTPErrors',
+    'HTTPErrors',
+    'AmbiguousHTTPErrors'
 ]
 
-optional_exceptions = []
-
-try:
-    import requests.exceptions
-    optional_exceptions += (
-        requests.exceptions.ConnectionError
-        requests.exceptions.HTTPError,
-        requests.exceptions.Timeout,
-        requests.exceptions.TooManyRedirects,
-        requests.exceptions.ChunkedEncodingError
-    )
-except ImportError:
-    pass
-
-HTTP_EXCEPTIONS = (
+SocketErrors = [
     ConnectionError,
-    socket.timeout,
+    socket.timeout
+]
+
+StrictHTTPErrors = SocketErrors + [
     ssl.SSLError,
     http.client.IncompleteRead,
     http.client.BadStatusLine,
     http.client.LineTooLong,
-    urllib.error.URLError,
-) + optional_exceptions
+]
 
-AMBIGUOUS_EXCEPTIONS = (
-    requests.exceptions.HTTPError,
+AmbiguousHTTPErrors = [
     urllib.error.HTTPError
-)
+]
+
+try:
+    import requests.exceptions
+    StrictHTTPErrors += [
+        requests.exceptions.ConnectionError,
+        requests.exceptions.Timeout,
+        requests.exceptions.TooManyRedirects,
+        requests.exceptions.ChunkedEncodingError
+    ]
+    HTTPErrors += [
+        requests.exceptions.HTTPError
+    ]
+    AmbiguousHTTPErrors += [
+        requests.exceptions.HTTPError
+    ]
+except ImportError:
+    pass
+
+HTTPErrors = StrictHTTPErrors + AmbiguousHTTPErrors + [
+    urllib.error.URLError,
+]
+
+for error in __all__:
+    locals()[error] = tuple(locals()[error])
