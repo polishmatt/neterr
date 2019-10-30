@@ -10,10 +10,13 @@ __all__ = [
 optional_exceptions = []
 
 try:
-    import requests
+    import requests.exceptions
     optional_exceptions += (
-        requests.exceptions.HTTPError,
         requests.exceptions.ConnectionError
+        requests.exceptions.HTTPError,
+        requests.exceptions.Timeout,
+        requests.exceptions.TooManyRedirects,
+        requests.exceptions.ChunkedEncodingError
     )
 except ImportError:
     pass
@@ -22,8 +25,13 @@ HTTP_EXCEPTIONS = (
     ConnectionError,
     socket.timeout,
     ssl.SSLError,
+    http.client.IncompleteRead,
     http.client.BadStatusLine,
     http.client.LineTooLong,
     urllib.error.URLError,
-    urllib.error.HTTPError
 ) + optional_exceptions
+
+AMBIGUOUS_EXCEPTIONS = (
+    requests.exceptions.HTTPError,
+    urllib.error.HTTPError
+)
