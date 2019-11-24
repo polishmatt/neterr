@@ -23,7 +23,7 @@ StrictHTTPErrors = SocketErrors + [
 ]
 
 AmbiguousHTTPErrors = [
-    urllib.error.HTTPError
+    urllib.error.URLError
 ]
 
 try:
@@ -34,18 +34,13 @@ try:
         requests.exceptions.TooManyRedirects,
         requests.exceptions.ChunkedEncodingError
     ]
-    HTTPErrors += [
-        requests.exceptions.HTTPError
-    ]
     AmbiguousHTTPErrors += [
         requests.exceptions.HTTPError
     ]
 except ImportError:
     pass
 
-HTTPErrors = StrictHTTPErrors + AmbiguousHTTPErrors + [
-    urllib.error.URLError,
-]
+HTTPErrors = StrictHTTPErrors + AmbiguousHTTPErrors
 
 for error in __all__:
     locals()[error] = tuple(locals()[error])
