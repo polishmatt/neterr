@@ -8,13 +8,13 @@ help:
 	@echo "release - package and upload a release"
 
 test:
-	python setup.py test --addopts '--cov=networktest --cov-fail-under=70'
+	python setup.py test --addopts '--cov=neterr --cov-fail-under=70'
 
 lint:
-	python setup.py test --addopts '--flake8 networktest tests'
+	python setup.py test --addopts '--flake8 neterr tests'
 
 coverage:
-	python setup.py test --addopts '--cov=networktest --cov-report=html'
+	python setup.py test --addopts '--cov=neterr --cov-report=html'
 	open htmlcov/index.html
 
 clean:
