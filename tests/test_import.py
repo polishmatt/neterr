@@ -1,4 +1,3 @@
-import sys
 import requests
 from unittest.mock import patch
 import importlib
@@ -12,6 +11,7 @@ def test_with_requests():
 
 def test_without_requests():
     raw_import = __import__
+
     def mock_import(name, *args):
         if name.startswith('requests'):
             raise ImportError()
