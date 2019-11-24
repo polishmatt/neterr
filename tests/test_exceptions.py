@@ -42,11 +42,13 @@ def test_strict_is_http():
     except HTTPErrors:
         pass
 
+
 def test_ambiguous_is_http():
     try:
         raise AmbiguousHTTPErrors[0](MagicMock())
     except HTTPErrors:
         pass
+
 
 def test_ambigious_is_not_strict():
     for error in AmbiguousHTTPErrors:
