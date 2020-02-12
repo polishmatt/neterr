@@ -54,6 +54,30 @@ StrictHTTPErrors contains exceptions that may be raised while working with the h
 
 HTTPErrors is a superset of StrictHTTPErrors and AmbiguousHTTPErrors.
 
+Combining Errors
+----------------
+
+Exception groups provided by neterr can be combined with other exceptions using the add operator.
+
+.. code-block:: python
+
+    from neterr import HTTPErrors
+
+    try:
+        raise MyException()
+    except HTTPErrors + MyException:
+        print('caught!')
+
+    try:
+        raise MyException()
+    except HTTPErrors + (MyException, MyOtherException):
+        print('caught!')
+
+    try:
+        raise MyException()
+    except HTTPErrors + [MyException, MyOtherException]:
+        print('caught!')
+
 Versioning
 ==========
 
