@@ -7,8 +7,17 @@ __all__ = [
     'SocketErrors',
     'StrictHTTPErrors',
     'HTTPErrors',
-    'AmbiguousHTTPErrors'
+    'AmbiguousHTTPErrors',
+    'ExceptionTuple'
 ]
+
+class ExceptionTuple(tuple):
+    def __add__(self, other):
+        if isinstance(other, type) and issubclass(other, BaseException):
+            other = (other,)
+        else:
+            other = tuple(other)
+        return super().__add__(other)
 
 SocketErrors = [
     ConnectionError,
@@ -43,4 +52,5 @@ except ImportError:
 HTTPErrors = StrictHTTPErrors + AmbiguousHTTPErrors
 
 for error in __all__:
-    locals()[error] = tuple(locals()[error])
+    if isinstance(locals()[error], list):
+        locals()[error] = ExceptionTuple(locals()[error])

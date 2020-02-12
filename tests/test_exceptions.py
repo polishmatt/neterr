@@ -1,4 +1,4 @@
-from pytest import fail
+import pytest
 from unittest.mock import MagicMock
 from neterr import (
     SocketErrors,
@@ -6,6 +6,10 @@ from neterr import (
     AmbiguousHTTPErrors,
     HTTPErrors
 )
+
+
+class TestException(Exception):
+    pass
 
 
 def test_socket_exception():
@@ -55,6 +59,39 @@ def test_ambigious_is_not_strict():
         try:
             raise error(MagicMock())
         except StrictHTTPErrors:
-            fail('Ambiguous cannot be caught by strict')
+            pytest.fail('Ambiguous cannot be caught by strict')
         except HTTPErrors:
             pass
+
+
+def test_add_single_catches_other():
+    try:
+        raise TestException()
+    except HTTPErrors + TestException:
+        pass
+
+
+def test_add_single_catches_http():
+    try:
+        raise HTTPErrors[0]()
+    except HTTPErrors + TestException:
+        pass
+
+
+def test_add_multiple_catches_other():
+    try:
+        raise TestException()
+    except HTTPErrors + [TestException]:
+        pass
+
+
+def test_add_multiple_catches_http():
+    try:
+        raise HTTPErrors[0]()
+    except HTTPErrors + [TestException]:
+        pass
+
+
+def test_add_unsupported():
+    with pytest.raises(TypeError):
+        HTTPErrors + None
