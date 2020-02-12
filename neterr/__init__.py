@@ -11,6 +11,7 @@ __all__ = (
     'ExceptionTuple'
 )
 
+
 class ExceptionTuple(tuple):
     def __add__(self, other):
         if isinstance(other, type) and issubclass(other, BaseException):
@@ -18,6 +19,7 @@ class ExceptionTuple(tuple):
         else:
             other = tuple(other)
         return super().__add__(other)
+
 
 SocketErrors = (
     ConnectionError,
